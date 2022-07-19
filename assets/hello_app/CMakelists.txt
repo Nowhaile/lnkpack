@@ -1,0 +1,8 @@
+cmake_minimum_required (VERSION 3.2)
+project (HelloApp)
+
+add_executable(HelloApp ${CMAKE_CURRENT_SOURCE_DIR}/main.c)
+set_target_properties(HelloApp PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY 
+		${CMAKE_SOURCE_DIR}/assets
+)
