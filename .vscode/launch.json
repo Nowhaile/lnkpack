@@ -1,0 +1,30 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug active file",
+            "type": "cppdbg",
+            "request": "launch",
+            "MIMode": "gdb",
+            "miDebuggerPath": "C:\\Program Files\\MSYS2\\mingw64\\bin\\gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "program": "${workspaceFolder}\\lnkpack.exe",
+            "args": [
+                "HelloApp.lnk",
+                "assets\\HelloApp.exe",
+                "-d",
+                "\"Hello App Link\"",
+                "-i",
+                "assets\\icon.ico"
+            ],
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "Cmake build"
+        },
+    ]
+}

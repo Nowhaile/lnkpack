@@ -1,0 +1,8 @@
+cmake_minimum_required (VERSION 3.2)
+project (lnkpack)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/)
+
+add_executable(lnkpack app/str.c app/endian.c app/message.c app/file.c app/main.c)
+
+add_subdirectory(${CMAKE_SOURCE_DIR}/assets/hello_app)
