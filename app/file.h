@@ -18,7 +18,7 @@
 #include "endian.h"
 
 char* get_realpath(const char* rel);
-char *get_user_path();
+int get_user_path(char* destination);
 
 void fwrite_uint8(uint8_t data, FILE* fd);
 void fwrite_uint16(uint16_t data, FILE* fd);

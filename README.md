@@ -4,8 +4,9 @@
 
 ## Usage
 
-Compile using CMake. Run with `lnkpack output input.exe -d "Description" -i icon.ico`.
-Example: `lnkpack "Hello App" assets\HelloApp.exe -d "Hello App Link" -i assets\icon.ico`
+Compile using CMake. Run with `lnkpack output input.exe -d "Description" -i icon.ico -s`.
+Example: `lnkpack "Hello App" assets\HelloApp.exe -d "Hello App Link" -i assets\icon.ico -s`
+Flag -s silents output
 
 Note: You can use `{UserDesktop}` as shortcut to desktop location
 

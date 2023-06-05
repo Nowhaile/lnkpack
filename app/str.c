@@ -20,25 +20,45 @@ char *stristr(const char *haystack, const char *needle)
 	return NULL;
 }
 
-char *strreplace(char *string, const char *search, const char *replace, bool case_insensitive)
+char *strreplace(char *target, const char *search, const char *replace, bool case_insensitive)
 {
-	char *p;
+	char *match_pos;
 	if(case_insensitive){
-		p = stristr(string, search);
+		match_pos = stristr(target, search);
 	}else{
-		p = strstr(string, search);
+		match_pos = strstr(target, search);
 	}
 
-	if (p != NULL)
+	if (match_pos != NULL)
 	{
-		size_t len1 = strlen(search);
-		size_t len2 = strlen(replace);
-		if (len1 != len2)
-			memmove(p + len2, p + len1, strlen(p + len1) + 1);
-		memcpy(p, replace, len2);
+		size_t orig_len = strlen(target);
+		size_t search_len = strlen(search);
+		size_t replace_len = strlen(replace);
+
+		if (search_len != replace_len){
+			char* append_pos = match_pos + search_len;
+			size_t append_len = strlen(append_pos);
+
+			char *tmp = malloc(append_len + 1);
+			memcpy(tmp, append_pos, append_len);
+
+			size_t match_offset = match_pos - target;
+			size_t new_target_size = orig_len + (replace_len - search_len) + 1;
+			char *allocated = realloc(target, new_target_size);
+			if(allocated == NULL)
+				return NULL;
+
+			target = allocated;
+			target[new_target_size - 1] = '\0';
+			match_pos = target + match_offset;
+
+			memcpy(match_pos+replace_len, tmp, append_len);
+		}
+
+		memcpy(match_pos, replace, replace_len);
 	}
 
-	return string;
+	return target;
 }
 
 char *str_prbrk(const char *source, const char *accept, bool nullOnNoMatch)
