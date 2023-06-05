@@ -56,8 +56,8 @@ int main(int argc, const char **argv) {
         }
     }
 
-    char* icon;
-    char* description;    
+    char* icon = NULL;
+    char* description = NULL;    
     if(argc > 3){
         for (int i = 3; i < argc; i++) {
 
@@ -94,7 +94,7 @@ int main(int argc, const char **argv) {
         }
     }
 
-    if(!description){
+    if(description == NULL){
         description = str_prbrk (argv[2], "/\\", false);
     }
 
@@ -102,7 +102,6 @@ int main(int argc, const char **argv) {
 
     setlocale(LC_ALL, "en_US.utf8");
     FILE* fd = fopen(argv[1], "w+b");
-    //FILE* fd = fopen("text.txt", "w+b");
     if (fd == NULL) {
         sendMessage("warn", "Failed to open output file: ", argv[1]);
         return 1;
@@ -125,7 +124,7 @@ int main(int argc, const char **argv) {
     dataFlags += 0x10;                      //HasWorkingDir
     dataFlags += 0x80;                      //IsUnicode
     dataFlags += 0x80000;                   //EnableTargetMetadata
-    if(icon)
+    if(icon != NULL)
         dataFlags += 0x40 + 0x4000;         //HasIconLocation + HasExpIcon
 
     fwrite_uint32(dataFlags, fd);           //Data flags
