@@ -9,11 +9,16 @@
 
 #if defined _WIN32 || defined __CYGWIN__
     #include <windows.h>
+    #include <shlobj.h>
+#else
+    #include <pwd.h>
+    #include <sys/types.h>
 #endif
 
 #include "endian.h"
 
 char* get_realpath(const char* rel);
+char *get_user_path();
 
 void fwrite_uint8(uint8_t data, FILE* fd);
 void fwrite_uint16(uint16_t data, FILE* fd);

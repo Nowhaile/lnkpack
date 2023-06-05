@@ -14,6 +14,9 @@
 
 char* str_prbrk (const char *source, const char *accept, bool nullOnNoMatch);
 
+char *stristr(const char *haystack, const char *needle);
+char *strreplace(char *string, const char *search, const char *replace, bool case_insensitive);
+
 int str_cnt(const char *source, const char *accept);
 int str_rchr(const char *source, const char *accept);
 

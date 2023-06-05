@@ -23,6 +23,7 @@ struct ItemID{
 
 //TODO: Fix link info
 //TODO: Fix extra data
+
 int main(int argc, const char **argv) {
     if (argc < 2) {
         printf("-------------------------------------------\n");
@@ -30,7 +31,9 @@ int main(int argc, const char **argv) {
         printf("Creates windows LNK file from exe file\n\n");
         printf("Usage: lnkpack <output_lnk> <input_ext> [-d <input_description>] [-i <input_ico>]\n\n");
         printf("Example: \n");
-        printf("lnkpack \"Hello App.lnk\" assets\\HelloApp.exe -d \"Hello App Link\" -i assets\\icon.ico\n");
+        printf("lnkpack \"Hello App\" assets\\HelloApp.exe -d \"Hello App Link\" -i assets\\icon.ico\n");
+        printf("\n");
+        printf("Note: You can use \"{UserDesktop}\" as shortcut to desktop location\n");
         printf("-------------------------------------------\n");
         return 1;
     }
@@ -98,12 +101,18 @@ int main(int argc, const char **argv) {
         description = str_prbrk (argv[2], "/\\", false);
     }
 
-    sendMessage("info", "Creating lnk for ", argv[1]);
+    char* location = strdup(argv[1]);
+    if(stristr(location, "{UserDesktop}") != NULL){
+        strreplace(location, "{UserDesktop}", get_user_path(), true);
+    }
+    location = strcat(location, ".lnk");
 
-    setlocale(LC_ALL, "en_US.utf8");
-    FILE* fd = fopen(argv[1], "w+b");
+    setlocale(LC_ALL, "");
+    sendMessage("info", "Creating lnk for ", location);
+
+    FILE* fd = fopen(location, "w+b");
     if (fd == NULL) {
-        sendMessage("warn", "Failed to open output file: ", argv[1]);
+        sendMessage("warn", "Failed to open output file: ", location);
         return 1;
     }
 
@@ -357,7 +366,7 @@ int main(int argc, const char **argv) {
 
     //-------------------------- Done ----------------------------
 
-    sendMessage("info", "Lnk created at: ", get_realpath(argv[1]));
+    sendMessage("info", "Lnk created at: ", get_realpath(location));
 
     fclose(fd);
 }

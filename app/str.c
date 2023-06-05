@@ -1,69 +1,122 @@
 #include "str.h"
 
-char* str_prbrk (const char *source, const char *accept, bool nullOnNoMatch){
-    const char *end = source + strlen(source);
+char *stristr(const char *haystack, const char *needle)
+{
+	do
+	{
+		const char *h = haystack;
+		const char *n = needle;
+		while (tolower((unsigned char)*h) == tolower((unsigned char)*n) && *n)
+		{
+			h++;
+			n++;
+		}
+		if (*n == 0)
+		{
+			return (char *)haystack;
+		}
+	} while (*haystack++);
 
-    while(end >= source) {
-        const char *a = accept;
-        while(*a){
-            if(*a++ == *end) {
-                return (char *)end+1;
-            }
-        }
-        end--;
-    }
+	return NULL;
+}
 
-	if(nullOnNoMatch)
-    	return NULL;
+char *strreplace(char *string, const char *search, const char *replace, bool case_insensitive)
+{
+	char *p;
+	if(case_insensitive){
+		p = stristr(string, search);
+	}else{
+		p = strstr(string, search);
+	}
+
+	if (p != NULL)
+	{
+		size_t len1 = strlen(search);
+		size_t len2 = strlen(replace);
+		if (len1 != len2)
+			memmove(p + len2, p + len1, strlen(p + len1) + 1);
+		memcpy(p, replace, len2);
+	}
+
+	return string;
+}
+
+char *str_prbrk(const char *source, const char *accept, bool nullOnNoMatch)
+{
+	const char *end = source + strlen(source);
+
+	while (end >= source)
+	{
+		const char *a = accept;
+		while (*a)
+		{
+			if (*a++ == *end)
+			{
+				return (char *)end + 1;
+			}
+		}
+		end--;
+	}
+
+	if (nullOnNoMatch)
+		return NULL;
 
 	return (char *)source;
 }
 
-int str_cnt(const char *source, const char *accept){
+int str_cnt(const char *source, const char *accept)
+{
 	int count = 0;
 
 	while (*source != '\0')
-    {
-      	const char *a = accept;		
-      	while (*a != '\0')
-          	count += (*a++ == *source);		
-      	source++;
-    }
+	{
+		const char *a = accept;
+		while (*a != '\0')
+			count += (*a++ == *source);
+		source++;
+	}
 
 	return count;
 }
 
-int str_rchr(const char *source, const char *accept){
+int str_rchr(const char *source, const char *accept)
+{
 	const char *end = source + strlen(source);
 
-    while(end >= source) {
-        const char *a = accept;
-        while(*a){
-            if(*a++ == *end) {
-                return end-source;
-            }
-        }
-        end--;
-    }
+	while (end >= source)
+	{
+		const char *a = accept;
+		while (*a)
+		{
+			if (*a++ == *end)
+			{
+				return end - source;
+			}
+		}
+		end--;
+	}
 
-    return -1;
+	return -1;
 }
 
-wchar_t* str_utf16(uint8_t *str) {
-	size_t wsize = mbstowcs( NULL, str, 0)+ 1;
-	wchar_t* dest = calloc(wsize, sizeof( wchar_t ));	
-    
-    mbstowcs( dest, str, wsize);
+wchar_t *str_utf16(uint8_t *str)
+{
+	size_t wsize = mbstowcs(NULL, str, 0) + 1;
+	wchar_t *dest = calloc(wsize, sizeof(wchar_t));
+
+	mbstowcs(dest, str, wsize);
 
 	return dest;
 }
 
 uint8_t str_hex(char c)
 {
-	if (c >= 'A') {
+	if (c >= 'A')
+	{
 		return (c - 'A' + 10);
 	}
-	else {
+	else
+	{
 		return (c - '0');
 	}
 }
@@ -73,7 +126,8 @@ uint8_t str_byte(char c1, char c2)
 	return str_hex(toupper(c1)) * 16 + str_hex(toupper(c2));
 }
 
-void clsid_tdat(char *src, uint8_t *dst) {
+void clsid_tdat(char *src, uint8_t *dst)
+{
 	dst[0] = str_byte(src[6], src[7]);
 	dst[1] = str_byte(src[4], src[5]);
 	dst[2] = str_byte(src[2], src[3]);
@@ -92,23 +146,24 @@ void clsid_tdat(char *src, uint8_t *dst) {
 	dst[15] = str_byte(src[34], src[35]);
 }
 
-uint8_t* str_uuid(){	
-    char buf[37] = {0};
+uint8_t *str_uuid()
+{
+	char buf[37] = {0};
 	char v[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
-	for( int i = 0; i < 36; ++i )
+	for (int i = 0; i < 36; ++i)
 	{
-		if( i == 8 || i == 13 || i == 18 || i == 23 )
+		if (i == 8 || i == 13 || i == 18 || i == 23)
 		{
 			buf[i] = '-';
 		}
 		else
 		{
-			buf[i] = v[rand()%16];
+			buf[i] = v[rand() % 16];
 		}
 	}
 
-    buf[36] = '\0';
+	buf[36] = '\0';
 
 	static uint8_t hex[16] = {0};
 	clsid_tdat(buf, hex);

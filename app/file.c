@@ -12,6 +12,20 @@ char* get_realpath(const char* rel){
     return real;
 }
 
+char* get_user_path(){
+    #if defined _WIN32 || defined __CYGWIN__
+        static char path[MAX_PATH+1];
+        if (SHGetSpecialFolderPathA(HWND_DESKTOP, path, CSIDL_DESKTOP, FALSE))
+            return path;
+    #else
+        passwd *pw = getpwuid(getuid());
+        if (pw)
+            return pw->pw_dir;
+    #endif
+
+    return NULL;
+}
+
 void fwrite_uint8(uint8_t data, FILE* fd) {
     fwrite(&data, 1, 1, fd);
 }

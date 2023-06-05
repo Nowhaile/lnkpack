@@ -16,7 +16,7 @@
             ],
             "program": "${workspaceFolder}\\lnkpack.exe",
             "args": [
-                "HelloApp.lnk",
+                "HelloApp",
                 "assets\\HelloApp.exe",
                 "-d",
                 "\"Hello App Link\"",
